@@ -64,7 +64,6 @@ h1 {
 }
 img {
   width: 100%;
-  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
 ul.transition {
   display: flex;
@@ -467,7 +466,7 @@ i {
     background: #fff;
     position: absolute;
     z-index: 21 !important;
-    width: 80%;
+    width: 50%;
     animation-fill-mode: initial;
   }
 }
