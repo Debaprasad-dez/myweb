@@ -36,7 +36,7 @@ const ContactSection = () => {
   };
   
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     setIsSubmitting(true);
     
     // Simulate API call with timeout
@@ -180,7 +180,9 @@ const ContactSection = () => {
                   } focus:outline-none`}
                   required
                 ></textarea>
-              
+              <input type="hidden" name="_captcha" value="false" />
+<input type="hidden" name="_template" value="table" />
+
               <motion.button 
                 type="submit" 
                 className="group w-full py-2 bg-portfolio-khaki text-portfolio-black font-medium rounded-md flex items-center justify-center space-x-2 overflow-hidden relative"
