@@ -1,0 +1,33 @@
+
+@import './styles/index.css';
+
+.image-container {
+    width: 410px; /* Adjust width */
+    height: 410px; /* Adjust height */
+    overflow: hidden;
+    position: relative;
+    z-index: 100;
+}
+
+.image-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: transform 0.5s ease;
+}
+
+.main-image {
+    transform: translateY(0%);
+}
+
+.hover-image {
+    transform: translateY(100%);
+}
+
+.image-container:hover .main-image {
+    transform: translateY(-100%); /* Pushes out of frame */
+}
+
+.image-container:hover .hover-image {
+    transform: translateY(0%); /* Moves into view */
+}

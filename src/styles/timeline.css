@@ -1,0 +1,16 @@
+
+@layer components {
+  /* Horizontal timeline */
+  .horizontal-timeline {
+    @apply flex overflow-x-auto gap-6 pb-4 scrollbar-none;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .timeline-item {
+    @apply min-w-[300px] bg-modern-secondary/10 p-6 rounded-xl border border-modern-secondary/30 shadow-md snap-start transition-all duration-300;
+  }
+  
+  .timeline-item:hover {
+    @apply -translate-y-2 bg-modern-secondary/20 border-modern-primary/30 shadow-lg;
+  }
+}

@@ -1,0 +1,191 @@
+
+/* Glass effect */
+.glass {
+  @apply backdrop-blur-md;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Steel text effect */
+.steel-text {
+  @apply text-portfolio-gunmetal font-bold;
+}
+
+.dark .steel-text {
+  background: linear-gradient(145deg, rgba(234, 224, 213, 0.9) 0%, rgba(198, 172, 143, 0.9) 50%, rgba(234, 224, 213, 0.8) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* Typewriter effect */
+.typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.typing-cursor {
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from, to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Background size utilities for gradient animations */
+.bg-size-200 {
+  background-size: 200% 100%;
+}
+
+.bg-pos-0 {
+  background-position: 0% 0%;
+}
+
+.bg-pos-100 {
+  background-position: 100% 0%;
+}
+
+/* Enhanced Glitch effect for loading screen */
+.enhanced-glitch {
+  position: relative;
+  text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+              -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+              0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  animation: enhanced-glitch 2.5s infinite;
+}
+
+.enhanced-glitch span {
+  position: relative;
+  z-index: 1;
+}
+
+.enhanced-glitch span::before,
+.enhanced-glitch span::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.enhanced-glitch span::before {
+  left: 2px;
+  text-shadow: -2px 0 #e63946;
+  animation: glitch-animation 3s infinite linear alternate-reverse;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  opacity: 0.8;
+}
+
+.enhanced-glitch span::after {
+  left: -2px;
+  text-shadow: 2px 0 #457b9d;
+  animation: glitch-animation 2s infinite linear alternate-reverse;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  opacity: 0.8;
+}
+
+@keyframes enhanced-glitch {
+  0% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  14% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  15% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.95),
+                0.025em 0.025em 0 rgba(0, 255, 0, 0.95),
+                -0.05em -0.05em 0 rgba(0, 0, 255, 0.95);
+  }
+  49% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  50% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.95),
+                0.05em 0 0 rgba(0, 255, 0, 0.95),
+                0 -0.05em 0 rgba(0, 0, 255, 0.95);
+  }
+  99% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                0.05em 0 0 rgba(0, 255, 0, 0.75),
+                0 -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  100% {
+    text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.95),
+                -0.025em -0.025em 0 rgba(0, 255, 0, 0.95),
+                -0.025em -0.05em 0 rgba(0, 0, 255, 0.95);
+  }
+}
+
+@keyframes glitch-animation {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(2px);
+  }
+  50% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Remove scrollbar but keep functionality for carousel on mobile */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile hero arc overlay */
+.hero-arc-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background-color: #f1faee;
+  border-top-left-radius: 50% 70%;
+  border-top-right-radius: 50% 70%;
+  z-index: 1;
+}
+
+.dark .hero-arc-overlay {
+  background-color: #0a0908;
+}
+
+/* Glassmorphism effect */
+.glassmorphism {
+  backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glassmorphism {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

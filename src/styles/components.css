@@ -1,0 +1,26 @@
+
+@layer components {
+  .hero-text-gradient {
+    @apply bg-gradient-to-r from-modern-text via-modern-depth to-modern-primary bg-clip-text text-transparent;
+  }
+
+  .button-glow {
+    @apply hover:shadow-[0_0_15px_rgba(230,57,70,0.7)] transition-shadow duration-300;
+  }
+
+  .skill-card {
+    @apply p-4 bg-modern-secondary/20 rounded-xl border border-modern-secondary/30 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center;
+  }
+
+  .project-card {
+    @apply p-6 rounded-xl glass border border-modern-secondary/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1;
+  }
+
+  .timeline-card {
+    @apply p-5 rounded-xl bg-modern-secondary/20 border-l-4 border-modern-primary shadow-md;
+  }
+
+  .form-input {
+    @apply bg-modern-depth/10 border border-modern-secondary/30 rounded-md px-4 py-2 text-modern-text focus:outline-none focus:ring-2 focus:ring-modern-primary/50 transition-all duration-300;
+  }
+}
