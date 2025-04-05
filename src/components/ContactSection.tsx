@@ -128,9 +128,8 @@ const ContactSection = () => {
             {/* Background gradient effect */}
             <div className="absolute -inset-1 opacity-20 bg-gradient-to-r from-portfolio-khaki/30 via-transparent to-portfolio-khaki/30 blur-xl"></div>
             
-            <form ref={formRef} onSubmit={handleSubmit} className="space-y-3 p-5 relative">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-3 p-5 relative" action="https://formsubmit.co/debaprasadpaul208@gmail.com" method="POST">
+              {/* <div className="grid grid-cols-2 gap-3"> */}
                   <input
                     type="text"
                     id="name"
@@ -147,8 +146,6 @@ const ContactSection = () => {
                     } focus:outline-none`}
                     required
                   />
-                </div>
-                <div>
                   <input
                     type="email"
                     id="email"
@@ -165,10 +162,8 @@ const ContactSection = () => {
                     } focus:outline-none`}
                     required
                   />
-                </div>
-              </div>
+              {/* </div> */}
               
-              <div>
                 <textarea
                   id="message"
                   name="message"
@@ -185,7 +180,6 @@ const ContactSection = () => {
                   } focus:outline-none`}
                   required
                 ></textarea>
-              </div>
               
               <motion.button 
                 type="submit" 
