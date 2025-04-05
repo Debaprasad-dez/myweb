@@ -6,6 +6,7 @@ import { useIsMobile } from "../hooks/use-mobile";
 import { useTheme } from "../providers/ThemeProvider";
 import Ben10 from '../assets/ben10.png';
 import Original from '../assets/original.jpeg';
+import OriginalM from '../assets/originalMobile.png';
 
 
 const HeroSection = () => {
@@ -195,18 +196,16 @@ const HeroSection = () => {
         />
         
         {/* Upper part with image */}
-        <div className="relative h-[60vh] w-full flex items-center justify-center">
-          <div className="w-full h-full">
+        <div className="relative w-full flex items-center justify-center">
+          <div className="w-full h-full mt-16">
             <img 
-              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&fit=crop" 
+              src={OriginalM} 
               alt="Debaprasad"
               className="w-full h-full object-cover"
             />
           </div>
         </div>
         
-        {/* Arc overlay */}
-        <div className="hero-arc-overlay" />
         
         {/* Content part */}
         <div className="relative z-10 px-6 pt-8 pb-20">
