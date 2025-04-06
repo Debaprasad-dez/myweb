@@ -21,8 +21,8 @@ const projects = [
     longDescription: 'A modern event ticketing platform that allows users to create, manage, and sell tickets for events. The platform includes features like QR code scanning, real-time analytics, and user-friendly interfaces for both organizers and attendees.',
     image: CheersPass,
     tags: ['React', 'Next.js', 'Stripe', 'Tailwind CSS'],
-    liveUrl: '#',
-    codeUrl: '#',
+    liveUrl: 'https://debaprasad-dez.github.io/cheerspass/',
+    codeUrl: 'https://github.com/Debaprasad-dez/cheerspass',
   },
   {
     id: 2,
@@ -43,8 +43,8 @@ const projects = [
     longDescription: 'This web application provides a digital canvas for users to create, organize, and share sticky notes. It features drag-and-drop functionality, color-coded notes, and collaborative editing. Users can categorize notes, set reminders, and integrate with calendar applications. The app is designed for both personal and team use, enhancing productivity and organization.',
     image: ThoughtTag,
     tags: ['React','canvas API'],
-    liveUrl: '#',
-    codeUrl: '#',
+    liveUrl: 'https://debaprasad-dez.github.io/thought-tag/',
+    codeUrl: 'https://github.com/Debaprasad-dez/thought-tag',
   },
   {
     id: 4,
