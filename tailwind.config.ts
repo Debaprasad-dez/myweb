@@ -57,18 +57,35 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         modern: {
-          primary: "#e63946",     // bold accent
-          background: "#f1faee",  // light background
-          secondary: "#a8dadc",   // subtle highlights
-          text: "#457b9d",        // text & interactive elements
-          depth: "#1d3557",       // elevated elements
+          primary: "#10b981",     // emerald accent (status / live)
+          background: "#fafaf9",  // light background
+          secondary: "#a3a3a3",   // muted neutrals
+          text: "#171717",        // body text
+          depth: "#0a0a0a",       // surfaces
         },
         portfolio: {
-          black: "#0a0908",
-          gunmetal: "#22333b",
-          almond: "#eae0d5",
-          khaki: "#c6ac8f",
-          walnut: "#5e503f",
+          black: "#09090b",       // zinc-950 — primary surface (dark)
+          gunmetal: "#18181b",    // zinc-900 — elevated surface
+          almond: "#fafafa",      // zinc-50 — primary text (dark mode)
+          khaki: "#34d399",       // emerald-400 — accent
+          walnut: "#27272a",      // zinc-800 — borders / dividers
+        },
+        ink: {
+          50:  "#fafafa",
+          100: "#f4f4f5",
+          200: "#e4e4e7",
+          300: "#d4d4d8",
+          400: "#a1a1aa",
+          500: "#71717a",
+          600: "#52525b",
+          700: "#3f3f46",
+          800: "#27272a",
+          900: "#18181b",
+          950: "#09090b",
+        },
+        accent2: {
+          DEFAULT: "#34d399",
+          glow:    "#10b981",
         },
       },
       borderRadius: {
@@ -111,6 +128,45 @@ export default {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-100%)" },
         },
+        pulseSoft: {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.6", transform: "scale(0.9)" },
+        },
+        gradientShift: {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+        tapRipple: {
+          "0%":   { transform: "translate(-50%, -50%) scale(0.4)", opacity: "0" },
+          "20%":  { opacity: "0.55" },
+          "100%": { transform: "translate(-50%, -50%) scale(2.4)", opacity: "0" },
+        },
+        slowSpin: {
+          from: { transform: "rotate(0deg)" },
+          to:   { transform: "rotate(360deg)" },
+        },
+        haloPulse: {
+          "0%, 100%": { opacity: "0.55", transform: "scale(1)" },
+          "50%":      { opacity: "0.85", transform: "scale(1.05)" },
+        },
+        driftA: {
+          "0%, 100%": { transform: "translate(0%, 0%) scale(1)" },
+          "33%":      { transform: "translate(12%, 8%) scale(1.1)" },
+          "66%":      { transform: "translate(-6%, 14%) scale(0.95)" },
+        },
+        driftB: {
+          "0%, 100%": { transform: "translate(0%, 0%) scale(1)" },
+          "33%":      { transform: "translate(-10%, 10%) scale(0.92)" },
+          "66%":      { transform: "translate(8%, -6%) scale(1.08)" },
+        },
+        driftC: {
+          "0%, 100%": { transform: "translate(0%, 0%) scale(1)" },
+          "50%":      { transform: "translate(5%, -8%) scale(1.12)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -121,6 +177,20 @@ export default {
         "shimmer": "shimmer 3s linear infinite",
         "tilt": "tiltEffect 8s ease-in-out infinite",
         "h-scroll": "horizontalScroll 30s linear infinite",
+        "pulse-soft": "pulseSoft 2s ease-in-out infinite",
+        "gradient-shift": "gradientShift 8s ease infinite",
+        "marquee": "marquee 40s linear infinite",
+        "tap-ripple": "tapRipple 3.2s ease-out infinite",
+        "slow-spin": "slowSpin 28s linear infinite",
+        "halo-pulse": "haloPulse 6s ease-in-out infinite",
+        "drift-a": "driftA 14s ease-in-out infinite",
+        "drift-b": "driftB 18s ease-in-out infinite",
+        "drift-c": "driftC 22s ease-in-out infinite",
+      },
+      fontFamily: {
+        sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        display: ['"Instrument Serif"', 'serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

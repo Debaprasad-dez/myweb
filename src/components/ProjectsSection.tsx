@@ -1,329 +1,348 @@
+import { useState } from "react";
+import { ArrowUpRight, Code, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import op7t from "../assets/op7t.png";
+import pourfolio from "../assets/pourfolio.png";
+import bodivue from "../assets/bodivue.png";
+import ThoughtTag from "../assets/ThoughtTag.png";
+import CheersPass from "../assets/CheersPass.png";
+import billxo from "../assets/billxo.png";
 
-import { useState, useRef, useEffect } from 'react';
-import { ExternalLink, Code, Eye, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useIsMobile } from '../hooks/use-mobile';
-import { useTheme } from '../providers/ThemeProvider';
-import op7t from '../assets/op7t.png'
-import pourfolio from '../assets/pourfolio.png'
-import bodivue from '../assets/bodivue.png'
-import ThoughtTag from '../assets/ThoughtTag.png'
-import CheersPass from '../assets/CheersPass.png'
-import billxo from '../assets/billxo.png'
+interface Project {
+  id: number;
+  title: string;
+  tagline: string;
+  description: string;
+  longDescription: string;
+  image: string;
+  tags: string[];
+  liveUrl: string;
+  codeUrl: string;
+  year: string;
+}
 
-// Project data
-const projects = [
+const projects: Project[] = [
   {
     id: 1,
-    title: 'CheersPass - The Event Ticketing Platform',
-    category: ' an event ticketing platform that allows users to create, manage, and sell tickets for events',
-    description: 'an event ticketing platform that allows users to create, manage, and sell tickets for events.',
-    longDescription: 'A modern event ticketing platform that allows users to create, manage, and sell tickets for events. The platform includes features like QR code scanning, real-time analytics, and user-friendly interfaces for both organizers and attendees.',
+    title: "CheersPass",
+    tagline: "Event ticketing platform",
+    description:
+      "Modern event ticketing with QR-coded entry, real-time analytics, and tooling for organizers and attendees alike.",
+    longDescription:
+      "A modern event ticketing platform that allows users to create, manage, and sell tickets for events. Features QR code scanning, real-time analytics, and user-friendly interfaces for both organizers and attendees.",
     image: CheersPass,
-    tags: ['React', 'Next.js', 'Stripe', 'Tailwind CSS'],
-    liveUrl: 'https://debaprasad-dez.github.io/cheerspass/',
-    codeUrl: 'https://github.com/Debaprasad-dez/cheerspass',
+    tags: ["Next.js", "Stripe", "Tailwind"],
+    liveUrl: "https://debaprasad-dez.github.io/cheerspass/",
+    codeUrl: "https://github.com/Debaprasad-dez/cheerspass",
+    year: "2025",
   },
   {
     id: 2,
-    title: 'Bodivue - Personal health and diet management platform',
-    category: 'Web Development',
-    description: 'personal health and diet management platform that helps users track their fitness goals and nutrition.',
-    longDescription: 'A personal health and diet management platform that helps users track their fitness goals and nutrition. The platform includes features like meal planning, exercise tracking, and personalized recommendations based on user data. It aims to promote a healthier lifestyle through data-driven insights and community support.',
+    title: "Bodivue",
+    tagline: "Health & nutrition companion",
+    description:
+      "Personal health and diet management with meal planning, exercise tracking, and data-driven recommendations.",
+    longDescription:
+      "A personal health and diet management platform that helps users track fitness goals and nutrition. Includes meal planning, exercise tracking, and personalized recommendations based on user data.",
     image: bodivue,
-    tags: ['React', 'TypeScript', 'Redux', 'Chart.js'],
-    liveUrl: 'https://debaprasad-dez.github.io/bodivue/',
-    codeUrl: 'https://github.com/Debaprasad-dez/bodivue',
+    tags: ["React", "TypeScript", "Redux", "Chart.js"],
+    liveUrl: "https://debaprasad-dez.github.io/bodivue/",
+    codeUrl: "https://github.com/Debaprasad-dez/bodivue",
+    year: "2025",
   },
   {
     id: 3,
-    title: 'ThoughtTag – A sticky notes application',
-    category: 'Web Development',
-    description: 'sticky notes application that allows users to create, organize, and share notes visually.',
-    longDescription: 'This web application provides a digital canvas for users to create, organize, and share sticky notes. It features drag-and-drop functionality, color-coded notes, and collaborative editing. Users can categorize notes, set reminders, and integrate with calendar applications. The app is designed for both personal and team use, enhancing productivity and organization.',
+    title: "ThoughtTag",
+    tagline: "Sticky notes, reimagined",
+    description:
+      "A visual canvas for capturing, organizing, and sharing sticky notes with drag-and-drop and collaborative editing.",
+    longDescription:
+      "A digital canvas for sticky notes: drag-and-drop, color-coding, collaborative editing, and calendar integration. Designed for both personal and team use.",
     image: ThoughtTag,
-    tags: ['React','canvas API'],
-    liveUrl: 'https://debaprasad-dez.github.io/thought-tag/',
-    codeUrl: 'https://github.com/Debaprasad-dez/thought-tag',
+    tags: ["React", "Canvas API"],
+    liveUrl: "https://debaprasad-dez.github.io/thought-tag/",
+    codeUrl: "https://github.com/Debaprasad-dez/thought-tag",
+    year: "2024",
   },
   {
     id: 4,
-    title: 'OP7T – A product website for my phone',
-    category: 'App Development',
-    description: 'Website for my phone that showcases its features and specifications.',
-    longDescription: 'portfolio website for my phone that showcases its features and specifications.',
+    title: "OP7T",
+    tagline: "Phone product site",
+    description:
+      "A scroll-driven product site showcasing the OnePlus 7T's features and specs.",
+    longDescription:
+      "Product website for my phone — showcases its features and specifications with scroll-driven storytelling.",
     image: op7t,
-    tags: ['React ','fullpage.js'],
-    liveUrl: 'https://debaprasad-dez.github.io/op7t/',
-    codeUrl: 'https://github.com/Debaprasad-dez?tab=repositories&q=op7&type=&language=&sort=',
+    tags: ["React", "fullpage.js"],
+    liveUrl: "https://debaprasad-dez.github.io/op7t/",
+    codeUrl:
+      "https://github.com/Debaprasad-dez?tab=repositories&q=op7&type=&language=&sort=",
+    year: "2023",
   },
   {
     id: 5,
-    title: 'Pourfolio - Personal Tasting Journal & Party Companion',
-    category: 'Web Development',
-    description: 'Tasting journal and party companion that helps users track their drinking experiences',
-    longDescription: 'tasting journal and party companion that helps users track their beverage experiences',
+    title: "Pourfolio",
+    tagline: "Tasting journal · PWA",
+    description:
+      "An offline-first tasting journal and party companion that tracks beverage experiences over time.",
+    longDescription:
+      "Tasting journal and party companion that helps users track their beverage experiences. Built as an installable PWA.",
     image: pourfolio,
-    tags: ['React', 'PWA'],
-    liveUrl: 'https://debaprasad-dez.github.io/pourfolio/',
-    codeUrl: 'https://github.com/Debaprasad-dez/pourfolio',
+    tags: ["React", "PWA"],
+    liveUrl: "https://debaprasad-dez.github.io/pourfolio/",
+    codeUrl: "https://github.com/Debaprasad-dez/pourfolio",
+    year: "2024",
   },
   {
     id: 6,
-    title: 'Billxo - Your own invoicing platform',
-    category: 'Web Development',
-    description: 'A invoicing platform that allows users to create, manage, and send invoices easily.',
-    longDescription: 'A modern invoicing platform that allows users to create, manage, and send invoices easily. The platform includes features like customizable templates, payment tracking, and real-time analytics.',
+    title: "Billxo",
+    tagline: "Your invoicing platform",
+    description:
+      "Customizable invoice templates, payment tracking, and real-time analytics — all client-side.",
+    longDescription:
+      "A modern invoicing platform with customizable templates, payment tracking, and real-time analytics. Fully client-side with realtime sync via WebSockets.",
     image: billxo,
-    tags: ['WebSockets', 'React', 'localStorage'],
-    liveUrl: 'https://debaprasad-dez.github.io/Billxo/',
-    codeUrl: 'https://github.com/Debaprasad-dez/Billxo',
+    tags: ["WebSockets", "React", "localStorage"],
+    liveUrl: "https://debaprasad-dez.github.io/Billxo/",
+    codeUrl: "https://github.com/Debaprasad-dez/Billxo",
+    year: "2024",
   },
 ];
 
+const SectionLabel = () => (
+  <div className="flex items-center gap-4 mb-12">
+    <span className="font-mono text-xs uppercase tracking-[0.2em] text-ink-500 dark:text-ink-400">
+      02 — Selected Work
+    </span>
+    <span className="flex-1 h-px bg-ink-200 dark:bg-ink-800" />
+    <span className="font-mono text-xs text-ink-500 dark:text-ink-400">
+      {projects.length.toString().padStart(2, "0")} projects
+    </span>
+  </div>
+);
+
 const ProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
-  const { theme } = useTheme();
 
-  // Open project modal
-  const openProjectModal = (projectId: number) => {
-    setSelectedProject(projectId);
-    setModalVisible(true);
-  };
-
-  // Handle carousel scroll on mobile
-  const scrollToNext = () => {
-    if (scrollContainerRef.current && currentProjectIndex < projects.length - 1) {
-      setCurrentProjectIndex(prev => prev + 1);
-    }
-  };
-
-  const scrollToPrev = () => {
-    if (scrollContainerRef.current && currentProjectIndex > 0) {
-      setCurrentProjectIndex(prev => prev - 1);
-    }
-  };
-
-  // Scroll to current project when index changes
-  useEffect(() => {
-    if (scrollContainerRef.current && isMobile) {
-      const cardWidth = scrollContainerRef.current.scrollWidth / projects.length;
-      scrollContainerRef.current.scrollTo({
-        left: cardWidth * currentProjectIndex,
-        behavior: 'smooth'
-      });
-    }
-  }, [currentProjectIndex, isMobile]);
-  
   return (
-    <section id="projects" className={`py-20 relative ${theme === 'light' ? 'bg-white' : 'bg-portfolio-black'}`}>
-      <div className="container mx-auto px-12 md:px-20">
-        <h2 className={`text-3xl md:text-4xl font-bold mb-4 flex items-center space-x-3 ${theme === 'light' ? 'text-portfolio-gunmetal' : 'text-portfolio-almond'}`}>
-          <span className="w-8 h-[2px] bg-modern-primary"></span>
-          <span>Featured Projects</span>
-        </h2>
-        
-        <p className={`${theme === 'light' ? 'text-portfolio-gunmetal/80' : 'text-portfolio-almond/80'} mb-12 max-w-2xl`}>
-          A showcase of my best work, featuring responsive, user-friendly applications built with modern technologies.
-        </p>
-        
-        {/* Mobile Carousel Navigation */}
-        {isMobile && (
-          <div className="flex justify-between items-center mb-6">
-            <button 
-              onClick={scrollToPrev}
-              disabled={currentProjectIndex === 0}
-              className={`p-2 rounded-full ${
-                currentProjectIndex === 0 
-                  ? 'text-portfolio-gunmetal/30 dark:text-portfolio-almond/30' 
-                  : 'text-portfolio-gunmetal dark:text-portfolio-almond hover:bg-portfolio-gunmetal/10 dark:hover:bg-portfolio-almond/10'
-              }`}
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <div className="flex space-x-2">
-              {projects.map((_, index) => (
-                <span 
-                  key={index} 
-                  className={`block w-2 h-2 rounded-full ${
-                    currentProjectIndex === index 
-                      ? 'bg-portfolio-khaki' 
-                      : 'bg-portfolio-gunmetal/20 dark:bg-portfolio-almond/20'
-                  }`}
-                />
-              ))}
-            </div>
-            <button 
-              onClick={scrollToNext}
-              disabled={currentProjectIndex === projects.length - 1}
-              className={`p-2 rounded-full ${
-                currentProjectIndex === projects.length - 1 
-                  ? 'text-portfolio-gunmetal/30 dark:text-portfolio-almond/30' 
-                  : 'text-portfolio-gunmetal dark:text-portfolio-almond hover:bg-portfolio-gunmetal/10 dark:hover:bg-portfolio-almond/10'
-              }`}
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-          </div>
-        )}
-        
-        {/* Projects Grid with unequal sizes */}
-        <div 
-          ref={scrollContainerRef}
-          className={`${isMobile ? 'flex overflow-x-auto snap-x snap-mandatory scrollbar-none' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'}`}
-        >
-          {projects.map((project, index) => {
-            // Create unequal card sizes
-            const isLarge = index % 3 === 0;
-            const isMedium = index % 3 === 1;
-            const isSmall = index % 3 === 2;
-            
-            return (
-              <motion.div 
-                key={project.id}
-                className={`${isMobile ? 'flex-shrink-0 w-full snap-center mr-6 last:mr-0' : 
-                  isLarge ? 'col-span-1' : 
-                  isMedium ? 'col-span-1' : 
-                  isSmall ? 'col-span-1' : ''} 
-                  flex flex-col overflow-hidden h-full`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-              >
-                {/* Project Card */}
-                <div className="flex-1 flex flex-col overflow-hidden group relative">
-                  {/* Project Image */}
-                  <div className="relative overflow-hidden bg-portfolio-gunmetal dark:bg-portfolio-walnut aspect-[4/3] cursor-pointer">
-                    <img 
-                      src={project.image} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      onClick={() => openProjectModal(project.id)}
-                    />
-                    
-                    {/* Buttons on hover (desktop) or always visible (mobile) */}
-                    <div className={`absolute inset-0 bg-portfolio-black/60 flex items-center justify-center gap-4 transition-opacity ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                      <motion.a 
-                        href={project.liveUrl} 
-                        target='_blank'
-                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-portfolio-khaki text-portfolio-black rounded-lg hover:bg-portfolio-almond transition-colors"
-                        whileHover={{ y: -2 }}
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>Preview</span>
-                      </motion.a>
-                      <motion.a 
-                        href={project.codeUrl} 
-                        target='_blank'
-                        className="flex items-center justify-center space-x-2 px-4 py-2 border border-portfolio-almond/30 text-portfolio-almond rounded-lg hover:bg-portfolio-walnut/20 transition-colors"
-                        whileHover={{ y: -2 }}
-                      >
-                        <Code className="w-4 h-4" />
-                        <span>Code</span>
-                      </motion.a>
-                    </div>
-                  </div>
-                  
-                  {/* Project Title and Category */}
-                  <div className="mt-4">
-                    <h3 className={`text-xl font-semibold ${theme === 'light' ? 'text-portfolio-gunmetal' : 'text-portfolio-almond'}`}>{project.title}</h3>
-                    <p className={`text-sm ${theme === 'light' ? 'text-portfolio-gunmetal/60' : 'text-portfolio-almond/60'}`}>{project.description}</p>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+    <section
+      id="projects"
+      className="relative py-20 md:py-24 bg-white dark:bg-ink-950"
+    >
+      <div className="container mx-auto px-6 md:px-10">
+        <SectionLabel />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-7 font-heading text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.03em] leading-[1.05]"
+          >
+            Things I've{" "}
+            <span className="font-display italic font-normal text-accent2">
+              shipped
+            </span>
+            .
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-5 lg:col-start-8 flex items-end text-ink-600 dark:text-ink-400 text-base md:text-lg leading-relaxed"
+          >
+            Side-projects, product work, and tasteful experiments. Each one
+            taught me something I now bring into production code.
+          </motion.p>
+        </div>
+
+        {/* Project list — repeating row pattern */}
+        <div className="divide-y divide-ink-200 dark:divide-ink-800 border-y border-ink-200 dark:border-ink-800">
+          {projects.map((project, index) => (
+            <ProjectRow
+              key={project.id}
+              project={project}
+              index={index}
+              onOpen={() => setSelectedProject(project.id)}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Project Modal */}
+      {/* Modal */}
       <AnimatePresence>
-        {modalVisible && selectedProject && (
-          <motion.div 
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-modern-depth/80 backdrop-blur-sm"
+        {selectedProject !== null && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-950/80 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={() => setSelectedProject(null)}
           >
-            <motion.div 
-              className={`${theme === 'light' ? 'bg-white' : 'bg-portfolio-black'} rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border ${theme === 'light' ? 'border-portfolio-gunmetal/20' : 'border-portfolio-walnut/50'}`}
-              initial={{ scale: 0.9, y: 20 }}
+            <motion.div
+              className="bg-white dark:bg-ink-900 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-ink-200 dark:border-ink-800"
+              initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
+              exit={{ scale: 0.95, y: 20 }}
               transition={{ type: "spring", damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
             >
-              {projects.find(p => p.id === selectedProject) && (
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className={`text-2xl font-bold ${theme === 'light' ? 'text-portfolio-gunmetal' : 'text-portfolio-almond'}`}>
-                      {projects.find(p => p.id === selectedProject)?.title}
-                    </h3>
-                    <button 
-                      className={`p-1 ${theme === 'light' ? 'hover:bg-portfolio-gunmetal/10' : 'hover:bg-portfolio-walnut/20'} rounded-full transition-colors`}
-                      onClick={() => setModalVisible(false)}
-                    >
-                      <X className={`w-6 h-6 ${theme === 'light' ? 'text-portfolio-gunmetal' : 'text-portfolio-almond'}`} />
-                    </button>
-                  </div>
-                  
-                  <div className="mb-6 rounded-lg overflow-hidden">
-                    <img 
-                      src={projects.find(p => p.id === selectedProject)?.image} 
-                      alt={projects.find(p => p.id === selectedProject)?.title}
-                      className="w-full object-cover h-64"
-                    />
-                  </div>
-                  
-                  <div className="mb-6">
-                    <h4 className={`text-lg font-semibold mb-2 ${theme === 'light' ? 'text-portfolio-gunmetal' : 'text-portfolio-almond'}`}>Project Overview</h4>
-                    <p className={`${theme === 'light' ? 'text-portfolio-gunmetal/80' : 'text-portfolio-almond/80'}`}>
-                      {projects.find(p => p.id === selectedProject)?.longDescription}
+              {(() => {
+                const p = projects.find((x) => x.id === selectedProject);
+                if (!p) return null;
+                return (
+                  <div className="p-6 md:p-8">
+                    <div className="flex justify-between items-start mb-6">
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-widest text-ink-500 mb-2">
+                          {p.year} · Project
+                        </p>
+                        <h3 className="font-heading text-2xl md:text-3xl font-semibold tracking-tight text-ink-900 dark:text-ink-50">
+                          {p.title}
+                        </h3>
+                        <p className="mt-1 text-ink-600 dark:text-ink-400">
+                          {p.tagline}
+                        </p>
+                      </div>
+                      <button
+                        className="p-2 hover:bg-ink-100 dark:hover:bg-ink-800 rounded-full transition-colors"
+                        onClick={() => setSelectedProject(null)}
+                      >
+                        <X className="w-5 h-5 text-ink-700 dark:text-ink-300" />
+                      </button>
+                    </div>
+
+                    <div className="mb-6 rounded-xl overflow-hidden border border-ink-200 dark:border-ink-800">
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        className="w-full object-cover h-72"
+                      />
+                    </div>
+
+                    <p className="text-ink-700 dark:text-ink-300 leading-relaxed mb-6">
+                      {p.longDescription}
                     </p>
-                  </div>
-                  
-                  <div className="mb-6">
-                    <h4 className={`text-lg font-semibold mb-2 ${theme === 'light' ? 'text-portfolio-gunmetal' : 'text-portfolio-almond'}`}>Technologies</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {projects.find(p => p.id === selectedProject)?.tags.map((tag, index) => (
-                        <span 
-                          key={index} 
-                          className={`text-sm px-3 py-1 rounded-full ${theme === 'light' ? 'bg-portfolio-gunmetal/10 text-portfolio-gunmetal border border-portfolio-gunmetal/30' : 'bg-portfolio-walnut/30 text-portfolio-almond border border-portfolio-walnut/50'}`}
+
+                    <div className="flex flex-wrap gap-1.5 mb-8">
+                      {p.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded-full border border-ink-200 dark:border-ink-800 text-ink-600 dark:text-ink-400"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
+
+                    <div className="flex gap-3">
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={p.liveUrl}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-ink-950 dark:bg-white text-white dark:text-ink-950 rounded-full text-sm font-medium hover:opacity-90 transition-all"
+                      >
+                        Live demo
+                        <ArrowUpRight className="w-4 h-4" />
+                      </a>
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={p.codeUrl}
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-ink-300 dark:border-ink-700 rounded-full text-sm font-medium hover:border-accent2 hover:text-accent2 transition-colors"
+                      >
+                        <Code className="w-4 h-4" />
+                        Source
+                      </a>
+                    </div>
                   </div>
-                  
-                  <div className="flex space-x-4">
-                    <a 
-                    target='_blank'
-                      href={projects.find(p => p.id === selectedProject)?.liveUrl} 
-                      className="flex items-center justify-center space-x-2 px-4 py-2 bg-portfolio-khaki text-portfolio-black rounded-lg hover:bg-portfolio-almond transition-colors"
-                    >
-                      <Eye className="w-4 h-4" />
-                      <span>Live Demo</span>
-                    </a>
-                    <a 
-                      href={projects.find(p => p.id === selectedProject)?.codeUrl} 
-                      className={`flex items-center justify-center space-x-2 px-4 py-2 ${theme === 'light' ? 'border border-portfolio-gunmetal/30 text-portfolio-gunmetal hover:bg-portfolio-gunmetal/10' : 'border border-portfolio-almond/30 text-portfolio-almond hover:bg-portfolio-walnut/20'} rounded-lg transition-colors`}
-                    >
-                      <Code className="w-4 h-4" />
-                      <span>View Code</span>
-                    </a>
-                  </div>
-                </div>
-              )}
+                );
+              })()}
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
     </section>
+  );
+};
+
+const ProjectRow = ({
+  project,
+  index,
+  onOpen,
+}: {
+  project: Project;
+  index: number;
+  onOpen: () => void;
+}) => {
+  const [hover, setHover] = useState(false);
+  return (
+    <motion.button
+      type="button"
+      onClick={onOpen}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.04 }}
+      className="group w-full text-left relative py-6 md:py-8 grid grid-cols-12 gap-4 items-center transition-colors hover:bg-ink-50/60 dark:hover:bg-ink-900/40 px-2 md:px-4 rounded-lg"
+    >
+      <span className="col-span-2 md:col-span-1 font-mono text-xs text-ink-500 dark:text-ink-500">
+        {(index + 1).toString().padStart(2, "0")}
+      </span>
+
+      <div className="col-span-10 md:col-span-4">
+        <h3 className="font-heading text-xl md:text-2xl font-semibold tracking-tight text-ink-900 dark:text-ink-50 group-hover:text-accent2 transition-colors">
+          {project.title}
+        </h3>
+        <p className="mt-1 text-sm text-ink-600 dark:text-ink-400">
+          {project.tagline}
+        </p>
+      </div>
+
+      <div className="hidden md:flex col-span-4 flex-wrap gap-1.5">
+        {project.tags.map((t) => (
+          <span
+            key={t}
+            className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-full border border-ink-200 dark:border-ink-800 text-ink-600 dark:text-ink-400"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+
+      <span className="hidden md:block col-span-2 font-mono text-xs text-ink-500 dark:text-ink-400">
+        {project.year}
+      </span>
+
+      <span className="col-span-12 md:col-span-1 flex justify-end">
+        <span className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-ink-200 dark:border-ink-800 text-ink-700 dark:text-ink-300 transition-all duration-300 group-hover:border-accent2 group-hover:text-accent2 group-hover:rotate-[-12deg]">
+          <ArrowUpRight className="w-4 h-4" />
+        </span>
+      </span>
+
+      {/* Hover preview thumb */}
+      <AnimatePresence>
+        {hover && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="pointer-events-none hidden lg:block absolute right-20 top-1/2 -translate-y-1/2 w-56 aspect-[4/3] rounded-xl overflow-hidden border border-ink-200 dark:border-ink-800 shadow-2xl z-10"
+          >
+            <img
+              src={project.image}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.button>
   );
 };
 

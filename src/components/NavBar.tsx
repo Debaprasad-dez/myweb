@@ -1,152 +1,139 @@
-
 import { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../providers/ThemeProvider";
+
+const SECTIONS = [
+  { id: "skills", label: "Expertise", num: "01" },
+  { id: "projects", label: "Work", num: "02" },
+  { id: "experience", label: "Experience", num: "03" },
+  { id: "contact", label: "Contact", num: "04" },
+];
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const { theme, toggleTheme } = useTheme();
-  
-  // Add scroll event listener to change navbar style and track active section
+
   useEffect(() => {
     const handleScroll = () => {
-      // Update navbar style on scroll
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-      
-      // Determine active section
-      const sections = ["skills", "projects", "experience", "contact"];
+      setScrolled(window.scrollY > 30);
+
       const scrollPosition = window.scrollY + window.innerHeight / 3;
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
-          
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          } else if (scrollPosition < document.getElementById("skills")?.offsetTop!) {
-            setActiveSection("hero");
-          }
+      let current = "hero";
+      for (const s of SECTIONS) {
+        const el = document.getElementById(s.id);
+        if (el && scrollPosition >= el.offsetTop) {
+          current = s.id;
         }
       }
+      setActiveSection(current);
     };
-    
-    window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  
+
   const scrollToSection = (sectionId: string) => {
     setIsOpen(false);
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const isActive = (section: string) => section === activeSection;
-  
   return (
-    <motion.nav 
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-        scrolled 
-          ? 'py-3 bg-white/80 backdrop-blur-lg shadow-lg dark:bg-portfolio-black/80' 
-          : 'py-5 bg-white dark:bg-portfolio-black text-portfolio-gunmetal dark:text-portfolio-almond'
+    <motion.nav
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        scrolled
+          ? "py-3 border-b border-ink-200/60 dark:border-ink-800/60 bg-white/70 dark:bg-ink-950/70 backdrop-blur-xl"
+          : "py-5 bg-transparent"
       }`}
-      initial={{ y: -100, opacity: 0 }}
+      initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-10">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <motion.div 
-            className="text-2xl font-bold text-portfolio-gunmetal dark:text-portfolio-almond"
-            whileHover={{ scale: 1.05 }}
+          <a
+            href="/"
+            className="group flex items-center gap-2 font-mono text-sm"
           >
-            <a href="/" className="flex items-center">
-              <span className="text-portfolio-khaki dark:text-portfolio-khaki">D</span>P
-            </a>
-          </motion.div>
-          
-          {/* Desktop Navigation - Centered */}
-          <div className="hidden md:flex items-center justify-center space-x-8 mx-auto">
-            <NavItem 
-              label="Skills" 
-              onClick={() => scrollToSection('skills')} 
-              isActive={isActive('skills')}
-            />
-            <NavItem 
-              label="Projects" 
-              onClick={() => scrollToSection('projects')} 
-              isActive={isActive('projects')}
-            />
-            <NavItem 
-              label="Experience" 
-              onClick={() => scrollToSection('experience')} 
-              isActive={isActive('experience')}
-            />
-            <NavItem 
-              label="Contact" 
-              onClick={() => scrollToSection('contact')} 
-              isActive={isActive('contact')}
-            />
+            <span className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-ink-950 dark:bg-white text-white dark:text-ink-950 font-semibold tracking-tight">
+              D
+            </span>
+            <span className="hidden sm:block text-ink-900 dark:text-ink-100 font-medium">
+              debaprasad
+              <span className="text-accent2">-</span>
+              dez
+            </span>
+          </a>
+
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-1 p-1 rounded-full border border-ink-200 dark:border-ink-800 bg-white/40 dark:bg-ink-900/40 backdrop-blur-md">
+            {SECTIONS.map((s) => {
+              const isActive = activeSection === s.id;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => scrollToSection(s.id)}
+                  className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                    isActive
+                      ? "text-ink-950 dark:text-ink-50"
+                      : "text-ink-500 dark:text-ink-400 hover:text-ink-900 dark:hover:text-ink-100"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-full bg-ink-100 dark:bg-ink-800"
+                      transition={{ type: "spring", duration: 0.5 }}
+                    />
+                  )}
+                  <span className="relative">{s.label}</span>
+                </button>
+              );
+            })}
           </div>
-          
-          <div className="flex items-center space-x-4">
-            {/* Theme Toggle with smooth transition */}
+
+          {/* Right cluster */}
+          <div className="flex items-center gap-2">
             <motion.button
-              className="p-2 rounded-full text-portfolio-gunmetal dark:text-portfolio-almond hover:bg-portfolio-gunmetal/10 dark:hover:bg-portfolio-gunmetal/20 transition-all duration-300"
+              className="p-2 rounded-full text-ink-700 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors"
               onClick={toggleTheme}
               whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.1, rotate: 15 }}
-              title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+              title={theme === "light" ? "Switch to dark" : "Switch to light"}
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={theme}
-                  initial={{ y: -20, opacity: 0, rotate: -30 }}
+                  initial={{ y: -10, opacity: 0, rotate: -30 }}
                   animate={{ y: 0, opacity: 1, rotate: 0 }}
-                  exit={{ y: 20, opacity: 0, rotate: 30 }}
-                  transition={{ duration: 0.3 }}
+                  exit={{ y: 10, opacity: 0, rotate: 30 }}
+                  transition={{ duration: 0.25 }}
                 >
                   {theme === "light" ? (
-                    <Moon className="w-5 h-5" />
+                    <Moon className="w-4 h-4" />
                   ) : (
-                    <Sun className="w-5 h-5" />
+                    <Sun className="w-4 h-4" />
                   )}
                 </motion.div>
               </AnimatePresence>
             </motion.button>
 
-            {/* Resume Button */}
-            <motion.a 
-              href="/myweb/resume.pdf" 
-              target="_blank" 
+            <a
+              href="/myweb/resume.pdf"
+              target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:block px-5 py-2.5 bg-transparent border border-portfolio-khaki text-portfolio-khaki font-medium rounded-full hover:bg-portfolio-khaki/10 transition-all"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+              className="hidden md:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-ink-950 dark:bg-white text-white dark:text-ink-950 text-xs font-medium hover:opacity-90 transition-all"
             >
               Resume
-            </motion.a>
-            
-            {/* Mobile Menu Button */}
-            <motion.button 
-              className="md:hidden text-portfolio-gunmetal dark:text-portfolio-almond focus:outline-none"
+              <span aria-hidden>↗</span>
+            </a>
+
+            <button
+              className="md:hidden p-2 text-ink-900 dark:text-ink-100"
               onClick={() => setIsOpen(!isOpen)}
-              whileTap={{ scale: 0.9 }}
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -154,63 +141,58 @@ const NavBar = () => {
                   initial={{ opacity: 0, rotate: isOpen ? -90 : 90 }}
                   animate={{ opacity: 1, rotate: 0 }}
                   exit={{ opacity: 0, rotate: isOpen ? 90 : -90 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                  {isOpen ? (
+                    <X className="w-5 h-5" />
+                  ) : (
+                    <Menu className="w-5 h-5" />
+                  )}
                 </motion.div>
               </AnimatePresence>
-            </motion.button>
+            </button>
           </div>
         </div>
       </div>
-      
-      {/* Mobile Menu */}
+
+      {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
-            className="md:hidden glass dark:glass"
+          <motion.div
+            className="md:hidden border-t border-ink-200 dark:border-ink-800 bg-white/95 dark:bg-ink-950/95 backdrop-blur-xl"
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
           >
-            <div className="container mx-auto px-4 py-4 space-y-4">
-              <MobileNavItem 
-                label="Skills" 
-                onClick={() => scrollToSection('skills')} 
-                isActive={isActive('skills')}
-                index={0}
-              />
-              <MobileNavItem 
-                label="Projects" 
-                onClick={() => scrollToSection('projects')} 
-                isActive={isActive('projects')}
-                index={1}
-              />
-              <MobileNavItem 
-                label="Experience" 
-                onClick={() => scrollToSection('experience')} 
-                isActive={isActive('experience')}
-                index={2}
-              />
-              <MobileNavItem 
-                label="Contact" 
-                onClick={() => scrollToSection('contact')} 
-                isActive={isActive('contact')}
-                index={3}
-              />
-              <motion.a 
-                href="/myweb/resume.pdf" 
-                target="_blank" 
+            <div className="container mx-auto px-6 py-4 space-y-1">
+              {SECTIONS.map((s, i) => (
+                <motion.button
+                  key={s.id}
+                  onClick={() => scrollToSection(s.id)}
+                  className={`w-full text-left flex items-center gap-3 px-3 py-3 rounded-lg ${
+                    activeSection === s.id
+                      ? "bg-ink-100 dark:bg-ink-900 text-ink-950 dark:text-ink-50"
+                      : "text-ink-600 dark:text-ink-300"
+                  }`}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <span className="font-mono text-xs text-ink-500 dark:text-ink-500">
+                    {s.num}
+                  </span>
+                  <span className="font-medium">{s.label}</span>
+                </motion.button>
+              ))}
+              <a
+                href="/myweb/resume.pdf"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center px-5 py-2.5 bg-transparent border border-portfolio-khaki text-portfolio-khaki font-medium rounded-full transition-all"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.3 }}
-                whileTap={{ scale: 0.95 }}
+                className="block w-full text-center px-4 py-3 mt-3 rounded-lg bg-ink-950 dark:bg-white text-white dark:text-ink-950 text-sm font-medium"
               >
-                Resume
-              </motion.a>
+                Resume ↗
+              </a>
             </div>
           </motion.div>
         )}
@@ -218,40 +200,5 @@ const NavBar = () => {
     </motion.nav>
   );
 };
-
-// Desktop Navigation Item with microanimation
-const NavItem = ({ label, onClick, isActive }: { label: string; onClick: () => void; isActive: boolean }) => (
-  <motion.button 
-    onClick={onClick}
-    className={`relative text-portfolio-gunmetal dark:text-portfolio-almond hover:text-portfolio-khaki dark:hover:text-portfolio-khaki transition-colors overflow-hidden ${isActive ? 'text-portfolio-khaki dark:text-portfolio-khaki font-medium' : ''}`}
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    <span className="relative z-10">{label}</span>
-    
-    {/* Background animation on hover */}
-    <motion.span
-      className="absolute bottom-0 left-0 w-full h-0.5 bg-portfolio-khaki dark:bg-portfolio-khaki origin-left"
-      initial={{ scaleX: 0 }}
-      animate={{ scaleX: isActive ? 1 : 0 }}
-      whileHover={{ scaleX: 1 }}
-      transition={{ duration: 0.3 }}
-    />
-  </motion.button>
-);
-
-// Mobile Navigation Item
-const MobileNavItem = ({ label, onClick, isActive, index }: { label: string; onClick: () => void; isActive: boolean; index: number }) => (
-  <motion.button 
-    onClick={onClick}
-    className={`block w-full text-left py-2 px-3 rounded-md ${isActive ? 'bg-portfolio-khaki/10 dark:bg-portfolio-khaki/10 text-portfolio-khaki dark:text-portfolio-khaki' : 'text-portfolio-gunmetal/80 dark:text-portfolio-almond/80 hover:text-portfolio-khaki dark:hover:text-portfolio-khaki'} transition-colors`}
-    initial={{ opacity: 0, x: -20 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay: index * 0.1, duration: 0.3 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    {label}
-  </motion.button>
-);
 
 export default NavBar;

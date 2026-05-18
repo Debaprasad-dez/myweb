@@ -1,380 +1,261 @@
-
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { ArrowUpRight, ArrowDown, MapPin } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Original from "../assets/original.jpeg";
 import { useIsMobile } from "../hooks/use-mobile";
-import { useTheme } from "../providers/ThemeProvider";
-import Ben10 from '../assets/ben10.png';
-import Original from '../assets/original.jpeg';
-import OriginalM from '../assets/originalMobile.png';
 
+const ROLES = [
+  "Senior Frontend Engineer",
+  "Microfrontend Architect",
+  "Real-time Systems",
+  "Performance Engineer",
+];
 
 const HeroSection = () => {
-  const divRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const frameRef = useRef<number | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [revealed, setRevealed] = useState(false);
   const isMobile = useIsMobile();
-  const { theme } = useTheme();
-  const [animationComplete, setAnimationComplete] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  // Handle mouse movement for 3D effect
+
   useEffect(() => {
-    if (isMobile) return;
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!divRef.current) return;
-      
-      const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
-      
-      // Update mouse position for steel text effect
-      setMousePosition({
-        x: (clientX / innerWidth) * 2 - 1,
-        y: (clientY / innerHeight) * 2 - 1
-      });
-      
-      // Calculate rotation based on mouse position
-      const xRotation = (clientY / innerHeight - 0.5) * 10;
-      const yRotation = (clientX / innerWidth - 0.5) * -10;
-      
-      divRef.current.style.transform = `
-        perspective(1000px)
-        rotateX(${xRotation}deg)
-        rotateY(${yRotation}deg)
-        translateZ(20px)
-      `;
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [isMobile]);
-  
-  // Canvas animation
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    
-    // Set canvas dimensions
-    const setCanvasSize = () => {
-      if (!canvas) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    
-    setCanvasSize();
-    window.addEventListener('resize', setCanvasSize);
-    
-    // Define shapes to draw
-    const shapes = [
-      { type: 'circle', x: canvas.width * 0.2, y: canvas.height * 0.3, size: 80, color: '#a8dadc50', speed: 0.3 },
-      { type: 'triangle', x: canvas.width * 0.7, y: canvas.height * 0.2, size: 100, color: '#e6394650', speed: 0.5 },
-      { type: 'square', x: canvas.width * 0.5, y: canvas.height * 0.7, size: 120, color: '#1d355750', speed: 0.2 },
-      { type: 'circle', x: canvas.width * 0.8, y: canvas.height * 0.8, size: 60, color: '#457b9d50', speed: 0.4 },
-      { type: 'triangle', x: canvas.width * 0.3, y: canvas.height * 0.6, size: 90, color: '#e6394650', speed: 0.3 },
-    ];
-    
-    let time = 0;
-    
-    // Animation loop
-    const animate = () => {
-      if (!ctx || !canvas) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      time += 0.01;
-      
-      // Draw shapes with movement
-      shapes.forEach((shape) => {
-        ctx.save();
-        
-        // Create floating motion
-        const x = shape.x + Math.sin(time * shape.speed * 5) * 40;
-        const y = shape.y + Math.cos(time * shape.speed * 3) * 30;
-        
-        ctx.fillStyle = shape.color;
-        ctx.globalAlpha = 0.5 + Math.sin(time * shape.speed) * 0.2;
-        
-        if (shape.type === 'circle') {
-          ctx.beginPath();
-          ctx.arc(x, y, shape.size, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (shape.type === 'square') {
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(time * shape.speed);
-          ctx.fillRect(-shape.size/2, -shape.size/2, shape.size, shape.size);
-          ctx.restore();
-        } else if (shape.type === 'triangle') {
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(time * shape.speed);
-          ctx.beginPath();
-          ctx.moveTo(0, -shape.size/2);
-          ctx.lineTo(shape.size/2, shape.size/2);
-          ctx.lineTo(-shape.size/2, shape.size/2);
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
-        }
-        
-        ctx.restore();
-      });
-      
-      frameRef.current = requestAnimationFrame(animate);
-    };
-    
-    animate();
-    
-    return () => {
-      if (frameRef.current) cancelAnimationFrame(frameRef.current);
-      window.removeEventListener('resize', setCanvasSize);
-    };
+    const t = setInterval(() => {
+      setRoleIndex((i) => (i + 1) % ROLES.length);
+    }, 2600);
+    return () => clearInterval(t);
   }, []);
 
-  // Text animation variants
-  const titleVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.8 } }
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const roleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { 
-        duration: 0.8,
-        delay: 0.6,
-        type: "spring",
-        stiffness: 100
-      } 
-    }
-  };
+  // On mobile, tap toggles reveal. On desktop, hover handles it.
+  const imageGrayClass = isMobile
+    ? revealed
+      ? ""
+      : "grayscale"
+    : "grayscale group-hover:grayscale-0";
 
-  // Typewriter effect for the role
-  const [displayText, setDisplayText] = useState("");
-  const fullText = "Senior Frontend Engineer";
-  
-  useEffect(() => {
-    let i = 0;
-    const typeTimer = setInterval(() => {
-      if (i < fullText.length) {
-        setDisplayText(fullText.substring(0, i + 1));
-        i++;
-      } else {
-        clearInterval(typeTimer);
-        setAnimationComplete(true);
-      }
-    }, 100);
-    
-    return () => clearInterval(typeTimer);
-  }, []);
-
-  const scrollToSection = (sectionId: string) => {
-    setIsOpen(false);
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-  
-  // Mobile specific layout
-  if (isMobile) {
-    return (
-      <section className="min-h-screen relative overflow-hidden">
-        {/* Canvas background */}
-        <canvas 
-          ref={canvasRef} 
-          className="absolute inset-0 z-0" 
-          style={{ opacity: 0.8 }}
-        />
-        
-        {/* Upper part with image */}
-        <div className="relative w-full flex items-center justify-center">
-          <div className="w-full h-full mt-16">
-            <img 
-              src={OriginalM} 
-              alt="Debaprasad"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-        
-        
-        {/* Content part */}
-        <div className="relative z-10 px-6 pt-8 pb-20">
-          <motion.h1 
-            className={`text-5xl font-bold font-heading ${
-              theme === 'light' 
-                ? 'text-portfolio-gunmetal' 
-                : 'steel-text'
-            }`}
-            initial="hidden"
-            animate="visible"
-            variants={titleVariants}
-          >
-            Debaprasad Paul
-          </motion.h1>
-          
-          <motion.h2 
-            className="text-2xl mt-4 text-modern-text dark:text-portfolio-almond font-heading"
-            initial="hidden"
-            animate="visible"
-            variants={roleVariants}
-          >
-            <span className="typewriter">{displayText}</span>
-            {!animationComplete && <span className="typing-cursor">|</span>}
-          </motion.h2>
-          
-          <p className="mt-6 text-lg text-modern-text/70 dark:text-portfolio-almond/70 animate-fade-in opacity-0" style={{ animationDelay: '0.6s' }}>
-            Creating elegant, high-performance web experiences with an eye for detail 
-            and a passion for clean code.
-          </p>
-          
-          <div className="mt-8 animate-fade-in opacity-0" style={{ animationDelay: '0.8s' }}>
-            <motion.button 
-              className="group px-6 py-3 bg-modern-primary text-white font-medium rounded-md flex items-center space-x-2 relative overflow-hidden button-glow"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="absolute inset-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></span>
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-modern-primary to-modern-depth opacity-0 group-hover:opacity-30 transition-opacity duration-500 blur-lg"></span>
-              
-              <span className="relative z-10">Let's Connect</span>
-              <ArrowRight className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-            </motion.button>
-          </div>
-        </div>
-      </section>
-    );
-  }
-  
-  // Desktop layout
   return (
-    <section className="min-h-screen flex flex-col justify-center py-20 relative overflow-hidden">
-      {/* Abstract Geometric Background */}
-      <canvas 
-        ref={canvasRef} 
-        className="absolute inset-0 z-0" 
-        style={{ opacity: 0.8 }}
-      />
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          {/* Abstract Profile Shape */}
-          <motion.div 
-            className="mb-10 md:mb-0 md:mr-12 relative"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="relative w-[180px] h-[180px] md:w-[450px] md:h-[450px]">
-              {/* Abstract geometric shape container */}
-              <div className="absolute inset-0 shape-animation">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                  <path 
-                    fill="#e63946" 
-                    d="M40.8,-62.2C52.9,-51.2,62.4,-38.8,69.4,-24.2C76.4,-9.6,80.8,7.1,77.2,21.8C73.5,36.5,61.9,49.1,48.1,58.3C34.2,67.5,17.1,73.2,0.4,72.6C-16.3,72,-32.6,65.1,-45.9,54.6C-59.1,44.1,-69.3,29.9,-74.8,13C-80.3,-3.9,-81.1,-23.5,-73.4,-38.8C-65.7,-54.1,-49.5,-65.1,-33.8,-74C-18,-82.9,-2.7,-89.7,9.8,-84.7C22.3,-79.7,28.7,-73.1,40.8,-62.2Z" 
-                    transform="translate(100 100)" 
-                    className="opacity-90"
-                  />
-                </svg>
-              </div>
-              
-              {/* Profile image */}
-              <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                <div className="image-container" >
+    <section className="relative min-h-screen flex items-center pt-20 md:pt-16 pb-12 overflow-hidden">
+      {/* Background layers */}
+      <div className="absolute inset-0 -z-10 mesh-gradient" />
+      <div className="absolute inset-0 -z-10 bg-grid mask-radial-fade" />
+      <div className="absolute inset-0 -z-10 bg-noise opacity-30 mix-blend-overlay pointer-events-none" />
 
-                <img 
-                  src={Original} 
-                  alt="original"
-                  className="w-full h-full object-cover image-wrapper main-image"
-                  style={{ width: '410px', height: '410px', objectFit: 'cover' }}
-                />
-                <img 
-                  src={Ben10}
-                  alt="Ben10"
-                  className="w-full h-full object-cover image-wrapper hover-image"
-                  style={{ width: '410px', height: '410px', objectFit: 'cover' }}
-                />
-                </div>
+      {/* Mobile-only animated aurora behind the portrait — fades out by 50% down */}
+      <div
+        aria-hidden
+        className="lg:hidden absolute inset-x-0 top-0 h-[55%] -z-10 overflow-hidden pointer-events-none"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black 0%, black 35%, transparent 100%)",
+          maskImage:
+            "linear-gradient(to bottom, black 0%, black 35%, transparent 100%)",
+        }}
+      >
+        <div className="absolute top-[8%] left-[12%] w-[65%] aspect-square rounded-full bg-emerald-400/35 dark:bg-emerald-400/25 blur-3xl animate-drift-a" />
+        <div className="absolute top-[2%] right-[8%] w-[55%] aspect-square rounded-full bg-indigo-400/30 dark:bg-indigo-400/20 blur-3xl animate-drift-b" />
+        <div className="absolute top-[18%] left-[30%] w-[50%] aspect-square rounded-full bg-pink-400/25 dark:bg-pink-400/15 blur-3xl animate-drift-c" />
+      </div>
+
+      <div className="container mx-auto px-6 md:px-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+          {/* Left — copy */}
+          <div className="lg:col-span-8 order-2 lg:order-1">
+            {/* Status badge */}
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-ink-200 dark:border-ink-800 bg-white/60 dark:bg-ink-900/60 backdrop-blur-md text-xs font-mono"
+            >
+              <span className="relative inline-block w-1.5 h-1.5 rounded-full bg-accent2 status-dot" />
+              <span className="text-ink-600 dark:text-ink-400">
+                Currently at EquiLend · Open to collaborations
+              </span>
+            </motion.div>
+
+            {/* Eyebrow */}
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.05 }}
+              className="mt-5 md:mt-6 font-mono text-xs uppercase tracking-[0.2em] text-ink-500 dark:text-ink-400"
+            >
+              Debaprasad Paul — Portfolio / 2026
+            </motion.p>
+
+            {/* Name + role */}
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mt-3 font-heading text-[clamp(2.25rem,7vw,5.5rem)] leading-[0.96] tracking-[-0.04em] font-semibold text-gradient"
+            >
+              Building interfaces
+              <br />
+              that feel{" "}
+              <span className="font-display italic font-normal text-accent2">
+                inevitable
+              </span>
+              .
+            </motion.h1>
+
+            {/* Role rotator */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-5 md:mt-6 flex items-center gap-3 font-mono text-sm text-ink-600 dark:text-ink-400"
+            >
+              <span className="inline-block h-px w-8 bg-ink-300 dark:bg-ink-700" />
+              <span className="relative inline-flex h-5 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={roleIndex}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="text-ink-900 dark:text-ink-100 whitespace-nowrap"
+                  >
+                    {ROLES[roleIndex]}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+            </motion.div>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-5 max-w-xl text-base md:text-[1.0625rem] text-ink-600 dark:text-ink-300 leading-relaxed"
+            >
+              Frontend engineer with 4+ years building scalable, high-performance
+              web applications in banking and financial markets. Currently
+              shaping real-time securities-finance systems at EquiLend with
+              React, TypeScript, and microfrontends.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="mt-7 md:mt-8 flex flex-wrap items-center gap-3"
+            >
+              <button
+                onClick={() => scrollTo("projects")}
+                className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-ink-950 dark:bg-white text-white dark:text-ink-950 text-sm font-medium hover:opacity-90 transition-all"
+              >
+                View selected work
+                <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </button>
+              <button
+                onClick={() => scrollTo("contact")}
+                className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-ink-300 dark:border-ink-700 text-sm font-medium hover:border-accent2 hover:text-accent2 transition-all"
+              >
+                Get in touch
+              </button>
+              <a
+                href="/myweb/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-1 text-sm font-mono text-ink-500 dark:text-ink-400 hover:text-accent2 transition-colors underline-offset-4 hover:underline"
+              >
+                resume.pdf ↗
+              </a>
+            </motion.div>
+
+            {/* Meta strip */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="mt-10 md:mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-xs text-ink-500 dark:text-ink-400"
+            >
+              <div className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>Bengaluru, IN</span>
               </div>
-              
-              {/* Overlay effect */}
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-tr from-modern-primary/10 via-transparent to-modern-secondary/20"
-                style={{
-                  transform: `rotate(${45 + mousePosition.x * 15}deg)`,
-                }}
-                transition={{ type: "spring", bounce: 0.25 }}
-              />
+              <div className="flex items-center gap-2">
+                <span className="text-ink-400 dark:text-ink-600">·</span>
+                <span>4+ yrs in fintech UI</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-ink-400 dark:text-ink-600">·</span>
+                <span>Real-time · microfrontends · DS</span>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right — portrait card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="lg:col-span-4 order-1 lg:order-2 relative mx-auto w-full max-w-[260px] sm:max-w-[300px] lg:max-w-none"
+          >
+            <div
+              className={`group relative card-ring rounded-2xl border border-ink-200 dark:border-ink-800 bg-white/40 dark:bg-ink-900/40 backdrop-blur-md p-2.5 md:p-3 ${
+                isMobile ? "cursor-pointer select-none" : ""
+              }`}
+              onClick={() => {
+                if (isMobile) setRevealed((r) => !r);
+              }}
+            >
+              <div className="relative aspect-square lg:aspect-[4/5] overflow-hidden rounded-xl bg-ink-100 dark:bg-ink-900">
+                <img
+                  src={Original}
+                  alt="Debaprasad Paul"
+                  className={`w-full h-full object-cover object-[center_12%] lg:object-[center_15%] transition-all duration-700 ${imageGrayClass}`}
+                />
+
+                {/* Mobile-only ripple hint (only while not revealed) */}
+                {isMobile && !revealed && (
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0"
+                  >
+                    <span
+                      className="absolute top-1/2 left-1/2 w-14 h-14 rounded-full border border-white/40 animate-tap-ripple"
+                      style={{ transform: "translate(-50%, -50%)" }}
+                    />
+                    <span
+                      className="absolute top-1/2 left-1/2 w-14 h-14 rounded-full border border-white/40 animate-tap-ripple"
+                      style={{
+                        transform: "translate(-50%, -50%)",
+                        animationDelay: "1.4s",
+                      }}
+                    />
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-2.5 md:mt-3 flex items-center justify-between px-2 py-1.5 font-mono text-[10px] uppercase tracking-widest text-ink-500 dark:text-ink-400">
+                <span>DP / 01</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent2 animate-pulse-soft" />
+                  {isMobile
+                    ? revealed
+                      ? "Color"
+                      : "Tap to reveal"
+                    : "Live"}
+                </span>
+              </div>
             </div>
           </motion.div>
-          
-          <div
-            ref={divRef}
-            className="transition-transform duration-200 ease-out md:max-w-2xl"
-          >
-            {/* Text Content */}
-            <motion.h1 
-              className={`text-5xl md:text-7xl font-bold font-heading ${
-                theme === 'light' 
-                  ? 'text-portfolio-gunmetal' 
-                  : 'steel-text'
-              }`}
-              initial="hidden"
-              animate="visible"
-              variants={titleVariants}
-            >
-              Debaprasad Paul
-            </motion.h1>
-            
-            <motion.h2 
-              className="text-2xl md:text-3xl mt-4 text-modern-text dark:text-portfolio-almond font-heading"
-              initial="hidden"
-              animate="visible"
-              variants={roleVariants}
-            >
-              <span className="typewriter">{displayText}</span>
-              {!animationComplete && <span className="typing-cursor">|</span>}
-            </motion.h2>
-            
-            <p className="max-w-2xl mt-6 text-lg text-modern-text/70 dark:text-portfolio-almond/70 animate-fade-in opacity-0" style={{ animationDelay: '0.6s' }}>
-              Creating elegant, high-performance web experiences with an eye for detail 
-              and a passion for clean code.
-            </p>
-            
-            <div className="mt-10 animate-fade-in opacity-0" style={{ animationDelay: '0.8s' }}>
-              <motion.button 
-                className="group px-6 py-3 bg-modern-primary text-white font-medium rounded-md flex items-center space-x-2 relative overflow-hidden button-glow"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {/* Button Glow Effect */}
-                <span className="absolute inset-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></span>
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-modern-primary to-modern-depth opacity-0 group-hover:opacity-30 transition-opacity duration-500 blur-lg"></span>
-                
-                <span className="relative z-10" onClick={() => scrollToSection('contact')}>Let's Connect</span>
-                <ArrowRight className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-              </motion.button>
-            </div>
-          </div>
         </div>
       </div>
-      
-      {/* Scroll Indicator - Centered */}
-      {/* <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center animate-fade-in opacity-0 z-20" style={{ animationDelay: '1.2s' }}>
-        <p className="text-sm text-modern-text/50 dark:text-portfolio-almond/50 mb-2">Scroll to explore</p>
-        <div className="w-5 h-9 rounded-full border-2 border-modern-text/20 dark:border-portfolio-almond/20 flex justify-center">
-          <div className="w-1 h-2 bg-modern-primary/70 rounded-full mt-2 animate-float"></div>
-        </div>
-      </div> */}
+
+      {/* Scroll cue */}
+      <button
+        onClick={() => scrollTo("skills")}
+        className="hidden md:flex absolute bottom-5 left-1/2 -translate-x-1/2 flex-col items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-ink-500 dark:text-ink-400 hover:text-accent2 transition-colors"
+      >
+        <span>Scroll</span>
+        <ArrowDown className="w-3.5 h-3.5 animate-float" />
+      </button>
     </section>
   );
 };
