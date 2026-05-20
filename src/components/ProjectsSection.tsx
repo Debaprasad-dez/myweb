@@ -7,6 +7,7 @@ import bodivue from "../assets/bodivue.png";
 import ThoughtTag from "../assets/ThoughtTag.png";
 import CheersPass from "../assets/CheersPass.png";
 import billxo from "../assets/billxo.png";
+import atlantis from "../assets/atlantis.png";
 
 interface Project {
   id: number;
@@ -22,6 +23,20 @@ interface Project {
 }
 
 const projects: Project[] = [
+  {
+    id: 7,
+    title: "Atlantis",
+    tagline: "Fraud intelligence platform",
+    description:
+      "Offline-first fraud analytics dashboard with graph visualization, entity explorer, anomaly detection, and audit trails — built 100% through Claude Code prompts.",
+    longDescription:
+      "Atlantis is a browser-based fraud intelligence platform with a dark, data-dense analyst aesthetic. Features a live dashboard, entity relationship graph, investigation workspace, geospatial mapping, anomaly detection tuning, and hash-chained audit logs. Fully offline using IndexedDB and Service Workers — architected for seamless future backend integration. Every line of code was generated through Claude Code using only natural language prompts.",
+    image: atlantis,
+    tags: ["React", "Vite", "Tailwind", "IndexedDB", "Claude Code", "Made using AI ✨"],
+    liveUrl: "https://debaprasad-dez.github.io/atlantis/",
+    codeUrl: "https://github.com/Debaprasad-dez/atlantis",
+    year: "2025",
+  },
   {
     id: 1,
     title: "CheersPass",
