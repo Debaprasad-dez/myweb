@@ -8,6 +8,7 @@ import ThoughtTag from "../assets/ThoughtTag.png";
 import CheersPass from "../assets/CheersPass.png";
 import billxo from "../assets/billxo.png";
 import atlantis from "../assets/atlantis.png";
+import cineOne from '../assets/CineOne.png'
 
 interface Project {
   id: number;
@@ -24,6 +25,20 @@ interface Project {
 
 const projects: Project[] = [
   {
+    id: 8,
+    title: "CineOne",
+    tagline: "Discover films across time and space.",
+    description:
+      "AI-powered cinematic discovery app with a 3D galaxy explorer, time tunnel, mood-based recommendations, and curated collections — built entirely through Claude Code prompts.",
+    longDescription:
+      "CinemaOne is a browser-based film discovery platform with a deep-space aesthetic. Features an interactive 3D galaxy where films orbit as explorable nodes, a Project Hail Mary–inspired time tunnel that journeys through cinema history by decade, and an AI companion that recommends films by mood, genre, era, and runtime using natural language. Includes a mood-based Discover engine, curated collections with full-page grids, continue-watching with timestamp persistence, cinematic search, and a personalized profile. Powered by the TMDB API, OpenRouter AI, React Three Fiber, and Framer Motion. Every line of code was generated through Claude Code using only natural language prompts.",
+    image: cineOne,
+    tags: ["React", "Three.js", "OpenRouter", "Claude Code", "AI Features ✨"],
+    liveUrl: "https://debaprasad-dez.github.io/cineOne/",
+    codeUrl: "https://github.com/Debaprasad-dez/cineOne",
+    year: "2026",
+  },
+  {
     id: 7,
     title: "Atlantis",
     tagline: "Fraud intelligence platform",
@@ -35,7 +50,7 @@ const projects: Project[] = [
     tags: ["React", "Vite", "Tailwind", "IndexedDB", "Claude Code", "Made using AI ✨"],
     liveUrl: "https://debaprasad-dez.github.io/atlantis/",
     codeUrl: "https://github.com/Debaprasad-dez/atlantis",
-    year: "2025",
+    year: "2026",
   },
   {
     id: 1,
