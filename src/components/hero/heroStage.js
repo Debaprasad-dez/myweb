@@ -633,7 +633,7 @@ export function mountHero({ sceneEl, skyEl, images, ascii: ASCII }) {
 
   // IBM 5151: types the command, prints the ASCII portrait line by line, rolls a CRT scan bar, blinks the cursor.
   function terminalScreen() {
-    const W = 1024, H = 768, lh = 20, cmd = "type dp.txt", art = ASCII.split("\n"), rows = art.length + 2;
+    const W = 1024, H = 768, lh = 20, cmd = "type dp.txt", art = ASCII.split(/\r?\n/), rows = art.length + 2;
     let x0 = 0, y0 = 0, cw = 11.4;
     const base = layer(W, H, (c) => {
       const bg = c.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * .6);
