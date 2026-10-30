@@ -1,0 +1,66 @@
+/* Hero: planetarium sky + device stage (ported from hero-devices.html). */
+
+/* Sky: full strength away from the copy; held to about a third behind it so the text keeps its contrast.
+   It runs --sky-run past the hero's bottom edge and fades out there, so a body crossing the edge stays whole and
+   there is no seam. Mask stops are fractions of the hero's height: p% of the hero is p% of the box minus p/100 of
+   the run. The script sets the geometry below (--hx/--hy/--r0/--r1: the clear zone around the device; --hb: hero
+   height; --fl: fade length; --range, --fade-a/b: scroll ranges; --drift per plane). */
+.hero-sky {
+  --sky-run: 50vh;
+  height: calc(100% + var(--sky-run));
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 calc(32% - .32 * var(--sky-run)), rgba(0,0,0,.25) calc(55% - .55 * var(--sky-run)));
+          mask-image: linear-gradient(180deg, #000 0%, #000 calc(32% - .32 * var(--sky-run)), rgba(0,0,0,.25) calc(55% - .55 * var(--sky-run)));
+}
+@media (min-width: 1024px) {
+  .hero-sky {
+    -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,.4) 42%, #000 64%);
+            mask-image: linear-gradient(90deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,.4) 42%, #000 64%);
+  }
+}
+/* Two static masks per group: the clear zone around the black hole, and the fade below the hero. */
+.sky-soft, .sky-hard {
+  position: absolute; inset: 0;
+  --below: linear-gradient(180deg, #000 var(--hb, 100%), rgba(0,0,0,.82) calc(var(--hb, 100%) + .3 * var(--fl, 0px)),
+           rgba(0,0,0,.36) calc(var(--hb, 100%) + .65 * var(--fl, 0px)), transparent calc(var(--hb, 100%) + var(--fl, 0px)));
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
+}
+.sky-soft {           /* far + mid planes: clear inside r0, back to full sky at r1 */
+  -webkit-mask-image: radial-gradient(circle at var(--hx, -999px) var(--hy, -999px), transparent var(--r0, 0px), #000 var(--r1, 0px)), var(--below);
+          mask-image: radial-gradient(circle at var(--hx, -999px) var(--hy, -999px), transparent var(--r0, 0px), #000 var(--r1, 0px)), var(--below);
+}
+.sky-hard {           /* near plane: the planet and asteroids never enter r0 */
+  -webkit-mask-image: radial-gradient(circle at var(--hx, -999px) var(--hy, -999px), transparent var(--r0, 0px), #000 calc(var(--r0, 0px) + 1px)), var(--below);
+          mask-image: radial-gradient(circle at var(--hx, -999px) var(--hy, -999px), transparent var(--r0, 0px), #000 calc(var(--r0, 0px) + 1px)), var(--below);
+}
+.sky-plane { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; will-change: transform; }
+
+/* Scroll: each plane drifts at its own pace (--drift over --range) and the sky fades out, all driven by the
+   scroll position on the compositor thread. (Browsers without scroll timelines get the same from the script.) */
+@keyframes sky-drift { to { transform: translate3d(0, var(--drift, 0px), 0); } }
+@keyframes sky-fade { to { opacity: 0; } }
+@supports (animation-timeline: scroll()) {
+  .sky-plane {
+    animation: sky-drift linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0px var(--range, 1500px);
+  }
+  .hero-sky {
+    animation: sky-fade cubic-bezier(.3333, 0, .6667, 1) both;          /* = smoothstep */
+    animation-timeline: scroll(root block);
+    animation-range: var(--fade-a, 180px) var(--fade-b, 860px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sky-plane { animation: none; }
+}
+
+.hero a:focus-visible, .hero button:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; }
+
+.hero-scene { position: relative; aspect-ratio: 4 / 5; cursor: pointer; border-radius: 16px; -webkit-user-select: none; user-select: none; }
+.hero-scene:focus-visible { outline: 2px solid #34d399; outline-offset: 4px; }
+.hero-scene.fallback { border-radius: 12px; background: center 15% / cover no-repeat; cursor: default; }
+/* The 3D canvas overhangs the column (1.8x, centred) so a turning device is only ever cut by the window edge.
+   It ignores the pointer; clicks and hover still land on .hero-scene. */
+.hero-scene canvas { position: absolute; left: -40%; top: -40%; width: 180%; height: 180%; display: block; pointer-events: none; }

@@ -42,8 +42,10 @@ const NavBar = () => {
   };
 
   return (
+    // Transition padding and colours, not everything: animating the backdrop blur's radius re-blurs the page
+    // under the bar every frame and stalled scrolling for ~100 ms each time it switched on.
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-40 transition-[padding,background-color,border-color] duration-300 ${
         scrolled
           ? "py-3 border-b border-ink-200/60 dark:border-ink-800/60 bg-white/70 dark:bg-ink-950/70 backdrop-blur-xl"
           : "py-5 bg-transparent"

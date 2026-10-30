@@ -40,7 +40,7 @@ const SkillsSection = () => {
   return (
     <section
       id="skills"
-      className="relative py-20 md:py-24 bg-white dark:bg-ink-950"
+      className="relative py-20 md:py-24"
     >
       <div className="container mx-auto px-6 md:px-10">
         <SectionLabel />
@@ -84,7 +84,7 @@ const SkillsSection = () => {
             icon={<Monitor className="w-5 h-5" />}
             num="01"
             title="Frontend Architecture"
-            description="4+ years building accessible, performance-tuned UIs in React, Next.js, and Angular. Specialist in microfrontends, Module Federation, and component systems that scale across teams."
+            description="5+ years building accessible, performance-tuned UIs in React, Next.js, and Angular. Specialist in microfrontends, Module Federation, and component systems that scale across teams."
             chips={frontendStack}
             highlight
           />
@@ -124,9 +124,9 @@ const SkillsSection = () => {
               <Zap className="w-4 h-4 text-accent2" />
             </div>
             <div className="grid grid-cols-3 gap-4">
-              <Stat value="4+ yrs" label="Fintech UI" />
-              <Stat value="95%" label="Test coverage" />
-              <Stat value="25%" label="Faster APIs" />
+              <Stat value="5+ yrs" label="Fintech UI" />
+              <Stat value="85%" label="Test coverage" />
+              <Stat value="50%" label="Faster APIs" />
             </div>
           </motion.div>
 
