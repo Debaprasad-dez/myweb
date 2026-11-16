@@ -9,6 +9,7 @@ import CheersPass from "../assets/CheersPass.png";
 import billxo from "../assets/billxo.png";
 import atlantis from "../assets/atlantis.png";
 import cineOne from '../assets/CineOne.png'
+import ojas from '../assets/ojas.png';
 
 interface Project {
   id: number;
@@ -24,6 +25,20 @@ interface Project {
 }
 
 const projects: Project[] = [
+  {
+    id: 9,
+    title: "Ojas One",
+    tagline: "An AI chat tool that answers in charts, tables and flowcharts.",
+    description:
+      "AI chat app for questions, research and explanations, with rich visual answers, saved chats, and full control over the model and answer length.",
+    longDescription:
+      "Ojas One is a browser-based AI chat tool in the spirit of ChatGPT and Claude. Ask anything, from quick facts to detailed explanations, and get answers that go beyond text: charts, sortable tables, flowcharts, callouts and copyable code blocks, all generated from the model's replies. Choose between three Hugging Face models (Llama 3.1 8B, Gemma 3 4B and 12B) and concise, balanced or detailed answer lengths, and use Stop and Answer-again controls to steer a response. A context panel shows exactly which messages the model can still see, so you know what it remembers. Includes up to 10 saved chats with search, undo-delete and cross-tab sync, one-click starter topics from Wikipedia, and an editable profile. Built with React 19, Vite, Hugging Face Inference, Highcharts, AG Grid and Mermaid. The API token stays server-side behind a rate-limited Vercel function, and the site is hosted on GitHub Pages.",
+    image: ojas,
+    tags: ["React", "Vite", "Hugging Face", "Highcharts", "Claude Code", "AI Features ✨"],
+    liveUrl: "https://debaprasad-dez.github.io/ojas/",
+    codeUrl: "https://github.com/Debaprasad-dez/ojas",
+    year: "2026",
+  },
   {
     id: 8,
     title: "CineOne",
